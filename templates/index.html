@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp" rel="stylesheet">
+    <link href="/static/style.css" type="text/css" rel="stylesheet">
+    <script src="/static/scripts.js" rel="javascript"></script>
+    <title>Home</title>
+</head>
+<body>
+<div class="container">
+    <div class="row justify-content-center lil-jump-bottom">
+        <div class="col-12 col-md-8 text-center">
+            <h3>Welcome, agent 47.</h3>
+            <h5>GOST was waiting for you.</h5>
+        </div>
+    </div>
+    <div class="row justify-content-center lil-jump-bottom">
+        <div class="col-12 col-md-8 text-center">
+            <a class="material-icons-outlined" href="{{url_for('retrieve_file')}}">text_snippet</a>
+            <a class="material-icons-outlined" href="{{url_for('info')}}" style="margin-left: 2em">info</a>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-8">
+            <nav>
+                <div class="nav nav-pills nav-fill lil-jump-bottom" id="nav-tab" role="tablist">
+                    <a class="nav-item nav-link active" id="nav-encrypt-tab" data-toggle="tab" href="#nav-encrypt" role="tab"
+                       aria-controls="nav-encrypt" aria-selected="true">Encrypt</a>
+                    <a class="nav-item nav-link" id="nav-decrypt-tab" data-toggle="tab" href="#nav-decrypt" role="tab"
+                       aria-controls="nav-decrypt" aria-selected="false">Decrypt</a>
+                </div>
+            </nav>
+            <div class="tab-content lil-jump-bottom">
+                <div class="tab-pane fade show active" id="nav-encrypt" role="tabpanel" aria-labelledby="nav-encrypt-tab">
+                    <form method="post" action="/encrypt">
+                        <label for="div-enc-op-mode">Select operating mode: </label>
+                        <div id="div-enc-op-mode" class="lil-jump-bottom">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="enc-op-mode" id="ecb-enc-op-mode" value="ECB">
+                                <label class="form-check-label" for="ecb-enc-op-mode">
+                                    Electronic Codebook <b>(ECB)</b>
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="enc-op-mode" id="cbc-enc-op-mode" value="CBC" checked>
+                                <label class="form-check-label" for="cbc-enc-op-mode">
+                                    Cipher Block Chaining <b>(CBC)</b>
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="enc-op-mode" id="ofb-enc-op-mode" value="OFB">
+                                <label class="form-check-label" for="ofb-enc-op-mode">
+                                    Output FeedBack <b>(OFB)</b>
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="enc-op-mode" id="cfb-enc-op-mode" value="CFB">
+                                <label class="form-check-label" for="cbc-enc-op-mode">
+                                    Cipher FeedBack <b>(CFB)</b>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group lil-jump-bottom">
+                            <label for="enc-plaintext">Type the <b>plaintext</b>: </label>
+                            <textarea class="form-control focusable" id="enc-plaintext" name="enc-plaintext" rows="3" placeholder="Encrypt me!"></textarea>
+                        </div>
+                        <div class="form-group lil-jump-bottom">
+                            <label for="enc-password">Type the <b>password</b>: </label>
+                            <div class="input-group">
+                                <input type="password" class="form-control" id="enc-password" name="enc-password" placeholder="mysecretpassword">
+                                <div class="input-group-append div-eye-btn">
+                                    <button type="button" class="btn slightly-round" id="btn-enc-password">
+                                        <span class="material-icons-outlined" id="glyph-eye-enc">visibility</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <label for="choose-salt">Do you want to choose the <b>salt</b> yourself?: </label>
+                        <div id="choose-salt" class="lil-jump-bottom">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="choose-salt" id="choose-salt-no" value="No" checked>
+                                <label class="form-check-label" for="choose-salt-no">
+                                    No
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="choose-salt" id="choose-salt-yes" value="Yes">
+                                <label class="form-check-label" for="choose-salt-yes">
+                                    Yes
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group lil-jump-bottom" id="div-salt-input" style="display: none">
+                            <label class="form-control-label" for="salt-input">Type the <b>salt</b>: </label>
+                            <input class="form-control" id="salt-input" name="salt-input" placeholder="saltysalt">
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary" id="btn-encrypt">
+                                Encrypt
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <div class="tab-pane fade" id="nav-decrypt" role="tabpanel" aria-labelledby="nav-decrypt-tab">
+                    <form method="post" action="/decrypt">
+                        <label for="div-dec-op-mode">Select operating mode: </label>
+                        <div id="div-dec-op-mode" class="tab lil-jump-bottom">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="dec-op-mode" id="ecb-dec-op-mode" value="ECB">
+                                <label class="form-check-label" for="ecb-dec-op-mode">
+                                    Electronic Codebook <b>(ECB)</b>
+                                </label>
+                            </div>
+                            <div class="form-check tab">
+                                <input class="form-check-input" type="radio" name="dec-op-mode" id="cbc-dec-op-mode" value="CBC" checked>
+                                <label class="form-check-label" for="cbc-dec-op-mode">
+                                    Cipher Block Chaining <b>(CBC)</b>
+                                </label>
+                            </div>
+                            <div class="form-check tab">
+                                <input class="form-check-input" type="radio" name="dec-op-mode" id="ofb-dec-op-mode" value="OFB">
+                                <label class="form-check-label" for="ofb-dec-op-mode">
+                                    Output FeedBack <b>(OFB)</b>
+                                </label>
+                            </div>
+                            <div class="form-check tab">
+                                <input class="form-check-input" type="radio" name="dec-op-mode" id="cfb-dec-op-mode" value="CFB">
+                                <label class="form-check-label" for="cfb-dec-op-mode">
+                                    Cipher FeedBack <b>(CFB)</b>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group tab lil-jump-bottom">
+                            <label for="dec-ciphertext">Type the <b>ciphertext</b> (hex): </label>
+                            <textarea class="form-control focusable" id="dec-ciphertext" name="dec-ciphertext" rows="3" placeholder="012cafe210"></textarea>
+                        </div>
+                        <div class="form-group tab lil-jump-bottom">
+                            <label for="dec-password">Type the <b>password</b>: </label>
+                            <div class="input-group">
+                                <input type="password" class="form-control" id="dec-password" name="dec-password" placeholder="mysecretpassword" aria-describedby="glyph-eye">
+                                <div class="input-group-append div-eye-btn">
+                                    <button type="button" class="btn slightly-round" id="btn-dec-password">
+                                        <span class="material-icons-outlined" id="glyph-eye-dec">visibility</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group tab lil-jump-bottom" id="salt-div">
+                            <label class="form-control-label" for="salt-textarea-dec">Type the <b>salt</b>: </label>
+                            <input class="form-control" id="salt-textarea-dec" name="salt-textarea-dec" placeholder="saltysalt">
+                        </div>
+                        <div class="form-group tab" id="div-iv-textarea">
+                            <label class="form-control-label" for="iv-textarea">Type <b>IV</b> (hex): </label>
+                            <input class="form-control focusable" id="iv-textarea" name="iv-textarea" placeholder="0123456789abcdef">
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary" id="btn-decrypt">
+                                Decrypt
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <blockquote class="blockquote">
+                <footer class="blockquote-footer">developed by Sghebre</footer>
+            </blockquote>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp" rel="stylesheet">
+    <link href="/static/style.css" type="text/css" rel="stylesheet">
+    <script src="/static/scripts.js" rel="javascript"></script>
+    <title>Informations</title>
+</head>
+<body>
+<div class="container">
+    <div class="row justify-content-center lil-jump-bottom">
+        <div class="col-12 col-md-4 text-center">
+            <h2>About this website...</h2>
+        </div>
+    </div>
+    <div class="row justify-content-center lil-jump-bottom">
+        <div class="col-12 col-md-4 text-center">
+            <a class="material-icons-outlined" href="{{url_for('homepage')}}">home</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 col-md-8 offset-md-2">
+            <p style="overflow-wrap: break-word">
+                This fantastic journey started on a rainy night of March.<br>
+                Wandering on Twitter, I stumbled upon a post of <a href="https://twitter.com/cryptolexicon">Crypto Dictionary</a> that
+                talked about the <b>GOST</b> cipher. This symmetric block cipher was the Soviet counterpart of the old American DES.<br>
+                The GOST cipher is a <b>64 bit block symmetric cipher</b> that is based, like DES, on a Feistel network.
+                The <b>key</b> is <b>256 bit</b> long, unlike DES where the key was dramatically shorter.
+                Both encryption and decryption are performed through 32 rounds. The basic operations used are shift, XOR and S-BOX passing.
+                In this implementation, the S-BOXES are fixed according to the standard <b>GOST R 34.12-2015</b>.<br>
+                The most effective attack against GOST requires like 2<sup>70</sup> plaintexts, so the cipher is <u><b>theoretically</b></u> broken.
+                Nevertheless, I think that using it as a toy cannot be harmful for anyone. Just don't use it for your credit card data
+                and you'll be fine.<br>
+                This particular implementation uses <b>Password-Based Key Derivation Function 2</b> (PBKDF2) with <b>SHA-256</b> to derive a key starting
+                from you password. PBKDF2 provides a stronger resistance to brute-force attacks.<br>
+                Since I like to implement basic paper-hand ciphers using various programming languages (Python, basically), I decided that
+                the challenge of implementing a more serious cipher would have been intriguing.<br>
+                Working on this cipher for a couple of nights, I managed to make it work.<br>
+                Nevertheless, the program could only be launched using the command line, so I wasn't that happy.<br>
+                A couple of days later I learned about the existence of <b>Flask</b> and so I decided that the time had come to
+                give a User Interface to this program. Flask is a very versatile tool and web programming CAN be fun, in the end.<br>
+                This is the final result, obtained by combining Python, HTML, Javascript and some CSS (mostly Boostrap).
+            </p>
+            <p>How can I encrypt a message?</p>
+            <ul style="overflow-wrap: break-word">
+                <li>Make sure that you are in the "Encrypt" tab;</li>
+                <li>Choose an operating mode (CBC is the most widely used).<br>
+                    ECB should never be used, at least for long messages;
+                </li>
+                <li>Type the message you want to encrypt in the plaintext box;</li>
+                <li>Type your secret password (don't disclose this secret!);</li>
+                <li>If you want to add salt to the password, you can do it.<br>
+                    Different salts applied to the same password result in completely different
+                    keys, so you can reuse your password and have different keys (and so different
+                    ciphertexts, even if the plaintexts are the same);
+                </li>
+                <li>Push the "Encrypt" button and wait for the result!</li>
+            </ul>
+            <p>After encrypting a message you'll be redirected to a page containing:</p>
+            <ul style="overflow-wrap: break-word">
+                <li>The operation mode you chose;</li>
+                <li>The plaintext you typed in;</li>
+                <li>The salt you used, which can be none, the one you chose or a random one;</li>
+                <li>The initialization vector (IV) in hexadecimal base.<br>
+                    This information is generated only for operation modes different than ECB;
+                </li>
+                <li>Finally, the encrypted message in hexadecimal base.
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="row justify-content-center lil-jump-bottom">
+        <div class="col-12 col-md-4 text-center">
+            <a class="btn btn-primary" href="{{url_for('homepage')}}">Home</a>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-8">
+            <blockquote class="blockquote">
+                <footer class="blockquote-footer">developed by Sghebre</footer>
+            </blockquote>
+        </div>
+    </div>
+</div>
+</body>
+</html>

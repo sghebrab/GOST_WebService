@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp" rel="stylesheet">
+    <link href="/static/style.css" type="text/css" rel="stylesheet">
+    <script src="/static/scripts.js" rel="javascript"></script>
+    <title>Encryption</title>
+</head>
+<body>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-8 text-center">
+            <h3>Encryption performed</h3>
+        </div>
+    </div>
+    <div class="row justify-content-center lil-jump-bottom" style="overflow-wrap: break-word">
+        <div class="col-12 col-md-8">
+            <h5>Data summary</h5>
+            <p>Operation mode: {{op_mode}}</p>
+            <p>Plaintext: {{plaintext}}</p>
+            <p>Salt: {{salt}}</p>
+            {% if op_mode != "ECB" %}
+            <p>IV (hex): {{iv}}</p>
+            {% endif %}
+            <div id="result" style="margin-top:1.5em">
+                <h5>Encrypted text (hex)</h5>
+                <p>{{ciphertext}}</p>
+            </div>
+            <form method="post" action="{{url_for('write_to_file')}}">
+                <input name="file-op-mode" value={{op_mode}} hidden>
+                <input name="file-ciphertext" value={{ciphertext}} hidden>
+                {% if salt == "" %}
+                    <input name="file-salt" value="" hidden>
+                {% else %}
+                    <input name="file-salt" value={{salt}} hidden>
+                {% endif %}
+                <input name="file-iv" value={{iv}} hidden>
+                <label for="div-write-to-file">Write result to file?: </label>
+                <div id="div-write-to-file">
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="write-to-file" id="write-to-file-no" value="No" checked>
+                        <label class="form-check-label" for="write-to-file-no">
+                            No
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="write-to-file" id="write-to-file-yes" value="Yes">
+                        <label class="form-check-label" for="write-to-file-yes">
+                            Yes
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group" id="div-file-path" style="display: none">
+                    <label for="file-path">Type the absolute path to the file: </label>
+                    <input class="form-control" id="file-path" name="file-path" placeholder="C:\Users\yourname\file.txt">
+                </div>
+                <div class="row justify-content-center">
+                    <button id="btn-submit" type="submit" class="btn btn-primary">Save to file</button>
+                    <a class="btn btn-primary" href="{{url_for('homepage')}}" style="margin-left: 2em">Home</a>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-8">
+            <blockquote class="blockquote">
+                <footer class="blockquote-footer">developed by Sghebre</footer>
+            </blockquote>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    $(document).ready(function(){
+    $("#btn-submit").prop("disabled", true);
+    $("#div-write-to-file").change(function(){
+        if ($("#write-to-file-yes").prop("checked")){
+           $("#div-file-path").fadeIn('slow');
+           $("#btn-submit").prop("disabled", false);
+           }
+        else{
+           $("#div-file-path").fadeOut('slow');
+           $("#btn-submit").prop("disabled", true);
+        }
+    });
+    });
+</script>
+</html>
