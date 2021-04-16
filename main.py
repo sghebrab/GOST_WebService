@@ -61,48 +61,9 @@ def decrypt_error():
     return render_template('decrypt_error.html')
 
 
-@app.route("/writefile", methods=['POST'])
-def write_to_file():
-    path = request.form['file-path']
-    op_mode = request.form['file-op-mode']
-    ciphertext = request.form['file-ciphertext']
-    salt = request.form['file-salt']
-    if salt == "":
-        salt = None
-    iv = request.form['file-iv']
-    if iv == "None":
-        iv = None
-    success = my_ut.write_to_file(path, op_mode, ciphertext, salt, iv)
-    if success:
-        return redirect(url_for("write_success"))
-    else:
-        return redirect(url_for("write_error"))
-
-
-@app.route("/writefile/success")
-def write_success():
-    return render_template("write_file_success.html")
-
-
-@app.route("/writefile/error")
-def write_error():
-    return render_template("write_file_error.html")
-
-
 @app.route("/info", methods=['GET'])
 def info():
     return render_template("info.html")
 
 
-@app.route("/display_file", methods=['GET'])
-def retrieve_file():
-    # send_from_directory("D:\Documents", "GOST_encryptions.txt")
-    file_h = open("D:\\Documents\\GOST_encryptions.txt")
-    text = file_h.read()
-    file_h.close()
-    # text = text.splitlines(True)
-    # text = ''.join(text)
-    return render_template('opened_file.html', file_content=text)
-
-
-app.run(host="0.0.0.0", port=42069, debug=True)#, ssl_context=('cert.pem', 'key.pem'))
+app.run(host="0.0.0.0", port=42068, debug=True)#, ssl_context=('cert.pem', 'key.pem'))
