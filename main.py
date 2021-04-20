@@ -66,4 +66,4 @@ def info():
     return render_template("info.html")
 
 
-app.run(host="0.0.0.0", port=42068, debug=True)#, ssl_context=('cert.pem', 'key.pem'))
+app.run(host="0.0.0.0", port=42069, debug=True)#, ssl_context=('cert.pem', 'key.pem'))
