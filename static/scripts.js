@@ -40,19 +40,19 @@ $(document).ready(function(){
     });
 
     $("#btn-decrypt").click(function(event){
-        //var regex_msg = /^([0-9a-f]{16})+$/g
-        //var regex_iv = /^[0-9a-f]{16}$/g
-        var regex_msg = /^[0-9a-f]+$/g
-        var regex_iv = /^[0-9a-f]+$/g
+        var regex_msg = /^([0-9a-f]{16})+$/g
+        var regex_iv = /^[0-9a-f]{16}$/g
+        //var regex_msg = /^[0-9a-f]+$/g
+        //var regex_iv = /^[0-9a-f]+$/g
         if (!$("#dec-ciphertext").val().match(regex_msg)){
             $("#dec-ciphertext").focus()
-            alert("Ciphertext must contain at least 1 hexadecimal character.")
+            alert("Ciphertext must be a hexadecimal string with a length multiple of 16.")
             event.preventDefault()
             return false
         }
         if($("input[name='dec-op-mode']:checked").val() != "ECB" && !$("#iv-textarea").val().match(regex_iv)){
             $("#iv-textarea").focus()
-            alert("IV must contain at least 1 hexadecimal character.")
+            alert("IV must contain exactly 16 hexadecimal characters.")
             event.preventDefault()
             return false
         }
