@@ -29,7 +29,12 @@
         </div>
     </div>
     <div class="row justify-content-center lil-jump-bottom">
-        <div class="col-12 col-md-4 text-center">
+        <div class="col-3 col-sm-1 text-center">
+            <a class="material-icons-outlined" href="https://github.com/sghebrab/GOST_WebService.git">
+                code
+            </a>
+        </div>
+        <div class="col-3 col-sm-1 text-center">
             <a class="material-icons-outlined" href="{{url_for('homepage')}}">home</a>
         </div>
     </div>
@@ -42,7 +47,7 @@
                 The GOST cipher is a <b>64 bit block symmetric cipher</b> that is based, like DES, on a Feistel network.
                 The <b>key</b> is <b>256 bit</b> long, unlike DES where the key was dramatically shorter.
                 Both encryption and decryption are performed through 32 rounds. The basic operations used are shift, XOR and S-BOX passing.
-                In this implementation, the S-BOXES are fixed according to the standard <b>GOST R 34.12-2015</b>.<br>
+                In this implementation, the S-BOXES are fixed according to the standard <a href="https://tools.ietf.org/html/rfc5830#page-3"><b>GOST R 34.12-2015</b></a>.<br>
                 The most effective attack against GOST requires like 2<sup>70</sup> plaintexts, so the cipher is <u><b>theoretically</b></u> broken.
                 Nevertheless, I think that using it as a toy cannot be harmful for anyone. Just don't use it for your credit card data
                 and you'll be fine.<br>
