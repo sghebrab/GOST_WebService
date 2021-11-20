@@ -23,14 +23,19 @@
 </head>
 <body>
 <div class="container">
-    <div class="row justify-content-center">
+    <div class="row justify-content-center lil-jump-bottom">
         <div class="col-12 col-md-8 text-center">
             <h3>Encryption performed</h3>
         </div>
     </div>
+    <div class="row justify-content-center lil-jump-bottom">
+        <div class="col-12 col-sm-4 text-center">
+            <a class="material-icons-outlined" href="{{url_for('homepage')}}">home</a>
+        </div>
+    </div>
     <div class="row justify-content-center lil-jump-bottom" style="overflow-wrap: break-word">
         <div class="col-12 col-md-8">
-            <h5>Data summary</h5>
+            <h3>Data summary</h3>
             <p>Operation mode: {{op_mode}}</p>
             <p>Plaintext: {{plaintext}}</p>
             <p>Salt: {{salt}}</p>
@@ -38,7 +43,7 @@
             <p>IV (hex): {{iv}}</p>
             {% endif %}
             <div id="result" style="margin-top:1.5em">
-                <h5>Encrypted text (hex)</h5>
+                <h3>Encrypted text (hex)</h3>
                 <p>{{ciphertext}}</p>
             </div>
             <div class="row justify-content-center">

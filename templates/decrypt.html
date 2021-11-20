@@ -16,17 +16,23 @@
             integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
             crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp" rel="stylesheet">
     <link href="/static/style.css" type="text/css" rel="stylesheet">
     <title>Decryption</title>
 </head>
 <body>
 <div class="container">
-    <div class="row justify-content-center">
+    <div class="row justify-content-center lil-jump-bottom">
         <div class="col-12 col-md-8 text-center">
             <h2>Decryption performed</h2>
         </div>
     </div>
-    <div class="row justify-content-center" style="overflow-wrap: break-word">
+    <div class="row justify-content-center lil-jump-bottom">
+        <div class="col-12 col-sm-4 text-center">
+            <a class="material-icons-outlined" href="{{url_for('homepage')}}">home</a>
+        </div>
+    </div>
+    <div class="row justify-content-center lil-jump-bottom" style="overflow-wrap: break-word">
         <div class="col-12 col-md-8">
             <h3>Data summary</h3>
             <p>Operation mode: {{op_mode}}</p>
@@ -36,7 +42,7 @@
             <p>IV: {{iv}}</p>
             {% endif %}
             <div id="result" style="margin-top: 1.5em">
-                <h2>Decrypted text</h2>
+                <h3>Decrypted text</h3>
                 <p>{{plaintext}}</p>
             </div>
             <div class="text-center">
