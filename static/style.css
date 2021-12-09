@@ -1,11 +1,17 @@
 body {
-  padding: 35px;
+    margin-top: 1.5em;
+    margin-bottom: 1.5em;
+  /*padding: 35px;*/
   background-color: #000000;
   color: #d4d4d4;
 }
 
 .lil-jump-bottom{
-    margin-bottom: 1em;
+    margin-bottom: 1.3em;
+}
+
+.lil-jump-top {
+    margin-top: 1.3em;
 }
 
 /*
