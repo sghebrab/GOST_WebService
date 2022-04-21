@@ -18,7 +18,7 @@ Pushing the "Encrypt" button will take you to another page containing a resume o
 # Decryption
 
 The second tab is pretty similar to the first one, but instead of performing encryption it performs decryption. Again, the required fields are:
-<ul>Operation mode (between ECB, CBC, OFB and OCB);</ul>
+<ul>Operation mode (between ECB, CBC, OFB, OCB and CTR);</ul>
 <ul>The ciphertext (in hex form);</ul>
 <ul>The password;</ul>
 <ul>The salt;</ul>
