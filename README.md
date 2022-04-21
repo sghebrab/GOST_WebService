@@ -6,7 +6,7 @@ The idea is very simple: the website is made of 2 main tabs, one for encrypting 
 # Encryption
 
 The first tab is used for encryption. The required fileds are: 
-<ul>Operation mode (between ECB, CBC, OFB and OCB);</ul>
+<ul>Operation mode (between ECB, CBC, OFB, OCB and CTR);</ul>
 <ul>The message to encrypt (A.K.A. plaintext);</ul>
 <ul>The password;</ul>
 <ul>Wether you want to choose the salt yourself or if you want it randomly generated.</ul>
