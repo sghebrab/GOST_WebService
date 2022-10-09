@@ -29,6 +29,9 @@ def bytes_to_string(bytes_in):
     i = 0
     while i < len(byte_list):
         if byte_list[i][0] == "0":
+            # if the current char is the null character (0x00), then stop here as the remaining portion is padding
+            if int(byte_list[i], 2) == 0:
+                return result
             char = int(byte_list[i], 2)
             result += chr(char)
         elif byte_list[i][0:3] == "110" and byte_list[i+1][0:2] == "10":
