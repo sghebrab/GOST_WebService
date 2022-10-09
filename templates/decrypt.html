@@ -43,7 +43,8 @@
             {% endif %}
             <div id="result" style="margin-top: 1.5em">
                 <h3>Decrypted text</h3>
-                <p>{{plaintext}}</p>
+                <!-- Must leave it like this otherwise the styling rule adds extra whitespaces/newlines -->
+                <div style="white-space: pre-wrap"><p>{{plaintext}}</p></div>
             </div>
         </div>
     </div>

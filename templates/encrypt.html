@@ -37,7 +37,8 @@
         <div class="col-11 col-md-8">
             <h3>Data summary</h3>
             <p>Operation mode: {{op_mode}}</p>
-            <p>Plaintext: {{plaintext}}</p>
+            <!-- Must leave it like this otherwise the styling rule adds extra whitespaces/newlines -->
+            <div style="white-space: pre-wrap"><p>Plaintext: <br>{{plaintext}}</p></div>
             <p>Salt: {{salt}}</p>
             {% if op_mode != "ECB" %}
             <p>IV (hex): {{iv}}</p>
