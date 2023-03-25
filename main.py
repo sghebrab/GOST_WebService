@@ -1,6 +1,8 @@
 from flask import Flask, render_template, request, redirect, url_for
-from GOST import GOST
-import my_utils as my_ut
+import my_utils
+import ctypes
+
+OP_MODES = {"ECB": 0, "CBC": 1, "OFB": 2, "CFB": 3, "CTR": 4}
 
 app = Flask(__name__)
 
@@ -20,17 +22,57 @@ def encrypt():
         salt = request.form['salt-input']
     else:
         salt = None
-    gost = GOST()
-    gost.set_operation_mode(op_mode)
-    gost.set_message(my_ut.string_to_bytes(plaintext))
-    key, salt = my_ut.pbkdf2(password, salt)
-    gost.set_key(key)
-    ciphertext = my_ut.leading_zeros_hex(gost.encrypt())
-    if op_mode != "ECB":
-        iv = my_ut.leading_zeros_hex(gost.get_iv())
-    else:
-        iv = None
-    return render_template('encrypt.html', op_mode=op_mode, plaintext=plaintext, salt=salt, iv=iv, ciphertext=ciphertext)
+
+    plaintext_as_bin_str = my_utils.string_to_bytes(plaintext)
+    # If plaintext in binary form is not multiple of 64, pad it to the right with enough zeros
+    if len(plaintext_as_bin_str) % 64 != 0:
+        plaintext_as_bin_str += "0"*((len(plaintext_as_bin_str)//64 + 1)*64 - len(plaintext_as_bin_str))
+    # Now, take 64 binary characters at a time and convert them to an int
+    plaintext_as_int_arr = []
+    for i in range(0, len(plaintext_as_bin_str), 64):
+        plaintext_as_int_arr.append(int(plaintext_as_bin_str[i:i+64], 2))
+
+    # Do the same for the key
+    key, salt = my_utils.pbkdf2(password, salt)
+    key_as_int_arr = []
+    for i in range(0, 256, 32):
+        key_as_int_arr.append(int(key[i:i+32], 2))
+
+    # Load the shared library
+    lib = ctypes.cdll.LoadLibrary('./GOST.so')
+
+    # Define the argument and return types for the encrypt function
+    lib.encrypt.argtypes = [
+        ctypes.POINTER(ctypes.c_uint64),  # uint64_t *blocks
+        ctypes.c_uint32,                  # uint32 blocks_len
+        ctypes.POINTER(ctypes.c_uint32),  # uint32_t *sub_keys
+        ctypes.c_uint8,                   # uint8 op_mode
+        ctypes.c_uint64,                  # uint64_t iv
+        ctypes.POINTER(ctypes.c_uint64),  # uint64_t *result
+    ]
+    lib.encrypt.restype = None
+
+    # Always generate an IV for simplicity, even if ECB is used
+    lib.generate_iv.argtypes = []
+    lib.generate_iv.restype = ctypes.c_uint64
+    iv = lib.generate_iv()
+
+    # This is e pointer to the result, as the encrypt function returns void but modifies the array in place
+    ciphertext_ptr = (ctypes.c_uint64 * len(plaintext_as_int_arr))()
+
+    # Call the C function with all the arguments needed
+    lib.encrypt((ctypes.c_uint64 * len(plaintext_as_int_arr))(*plaintext_as_int_arr), len(plaintext_as_int_arr),
+             (ctypes.c_uint32 * 8)(*key_as_int_arr), OP_MODES[op_mode], iv, ciphertext_ptr)
+
+    # Load data starting from the pointer, at the end you will have a list of 64-bit integers
+    ciphertext = [ciphertext_ptr[i] for i in range(len(plaintext_as_int_arr))]
+
+    # Now, just for representation, convert the integer result to hex form
+    ciphertext_as_hex_str = ""
+    for i in range(len(ciphertext)):
+        ciphertext_as_hex_str += my_utils.leading_zeros_hex(bin(ciphertext[i])[2:].zfill(64))
+
+    return render_template('encrypt.html', op_mode=op_mode, plaintext=plaintext, salt=salt, iv=hex(iv)[2:].zfill(16), ciphertext=ciphertext_as_hex_str)
 
 
 @app.route('/decrypt', methods=['POST'])
@@ -39,19 +81,52 @@ def decrypt():
     ciphertext = request.form['dec-ciphertext']
     password = request.form['dec-password']
     salt = request.form['salt-textarea-dec']
-    gost = GOST()
-    gost.set_operation_mode(op_mode)
-    gost.set_encrypted_msg(my_ut.hex_to_bin_mult_64(ciphertext))
-    key, salt = my_ut.pbkdf2(password, salt)
-    gost.set_key(key)
+
+    # Ciphertext is a hex string, so take 16 chars at a time and convert them to an int
+    ciphertext_as_int_arr = []
+    for i in range(0, len(ciphertext), 16):
+        ciphertext_as_int_arr.append(int(ciphertext[i:i+16], 16))
+
+    # Same logic for the key
+    key, salt = my_utils.pbkdf2(password, salt)
+    key_as_int_arr = []
+    for i in range(0, 256, 32):
+        key_as_int_arr.append(int(key[i:i+32], 2))
+
     if op_mode != "ECB":
-        iv = request.form['iv-textarea']
-        gost.set_iv(my_ut.hex_to_bin_mult_64(iv))
+        iv = int(request.form['iv-textarea'], 16)
     else:
-        iv = None
-    plaintext = my_ut.bytes_to_string(gost.decrypt())
+        iv = 0
+
+    # Load the shared library
+    lib = ctypes.cdll.LoadLibrary('./GOST.so')
+
+    lib.decrypt.argtypes = [
+        ctypes.POINTER(ctypes.c_uint64),  # uint64_t *blocks
+        ctypes.c_uint32,                  # uint32 blocks_len
+        ctypes.POINTER(ctypes.c_uint32),  # uint32_t *sub_keys
+        ctypes.c_uint8,                   # uint8 mode
+        ctypes.c_uint64,                  # uint64_t iv
+        ctypes.POINTER(ctypes.c_uint64),  # uint64_t *result
+    ]
+    lib.decrypt.restype = None
+    plaintext_ptr = (ctypes.c_uint64 * len(ciphertext_as_int_arr))()
+
+    # Call the C function with all the arguments needed
+    lib.decrypt((ctypes.c_uint64 * len(ciphertext_as_int_arr))(*ciphertext_as_int_arr), len(ciphertext_as_int_arr),
+             (ctypes.c_uint32 * 8)(*key_as_int_arr), OP_MODES[op_mode], iv, plaintext_ptr)
+
+    # Same as before, plaintext is a pointer so you have to load data starting from it
+    plaintext = [plaintext_ptr[i] for i in range(len(ciphertext_as_int_arr))]
+
+    # Take the integers, convert them to binary (with 0 padding), then convert the whole binary result to UTF-8
+    plaintext_as_bin_str = ""
+    for i in range(len(plaintext)):
+        plaintext_as_bin_str += bin(plaintext[i])[2:].zfill(64)
+    plaintext = my_utils.bytes_to_string(plaintext_as_bin_str)
+
     if plaintext is not None:
-        return render_template('decrypt.html', op_mode=op_mode, ciphertext=ciphertext, salt=salt, iv=iv, plaintext=plaintext)
+        return render_template('decrypt.html', op_mode=op_mode, ciphertext=ciphertext, salt=salt, iv=iv if iv != 0 else None, plaintext=plaintext)
     else:
         return redirect(url_for('decrypt_error'))
 
@@ -65,5 +140,3 @@ def decrypt_error():
 def info():
     return render_template("info.html")
 
-
-app.run(host="0.0.0.0", port=42069, debug=True)  # , ssl_context=('server-cert.pem', 'server-key.pem'))
