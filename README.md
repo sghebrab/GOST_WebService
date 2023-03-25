@@ -27,9 +27,32 @@ The second tab is pretty similar to the first one, but instead of performing enc
 After pushing the "Decrypt" button you'll be redirected to another page containing a resume of the data you typed in, plus the decrypted message.
 
 # Project organization:
+<ol>
+    <li>Main dir: it contains the GOST.py library which allows you to encrypt and decrypt messages. The main file is used to make the web server run;</li>
+    <li>Templates dir: contains the HTML files. Index is of course the homepage, while the other ones' purpose can be guessed easily;</li>
+    <li>Static dir: it contains favicons and JS scripts, plus some CSS styling;</li>
 
-  1 - Main dir: it contains the GOST.py library which allows you to encrypt and decrypt messages. The main file is used to make the web server run.
-  
-  2 - Templates dir: contains the HTML files. Index is of course the homepage, while the other ones' purpose can be guessed easily.
-  
-  3 - Static dir: it contains favicons and JS scripts, plus some CSS styling.
+# How to
+<ol>
+    <li>Clone the repo on your PC;</li>
+    <li>Create a virtual environment and install required packages from requirements.txt;</li>
+    <li>Compile the C file GOST.c into a shared library object named GOST.so;</li>
+    <li>Run the main Flask app from CLI.</li>
+</ol>
+
+## Create the shared library
+To compile the C file to make the shared library object, you can use the following commands from inside the program's directory:
+
+	gcc -c -fPIC GOST.c -o GOST.o
+	gcc -shared GOST.o -o GOST.so
+	rm GOST.o
+
+## Run the Flask app
+To run the app, you can use the following commands from inside the program's directory:
+
+	. venv/bin/activate
+	export FLASK_APP=main
+	export FLASK_DEBUG=0
+	export PYTHONWARNINGS="ignore:Unverified HTTPS request"
+	flask run --host="0.0.0.0" --port=8080 --cert=gost.pem --key=gost.key
+	deactivate
