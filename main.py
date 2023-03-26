@@ -126,7 +126,7 @@ def decrypt():
     plaintext = my_utils.bytes_to_string(plaintext_as_bin_str)
 
     if plaintext is not None:
-        return render_template('decrypt.html', op_mode=op_mode, ciphertext=ciphertext, salt=salt, iv=iv if iv != 0 else None, plaintext=plaintext)
+        return render_template('decrypt.html', op_mode=op_mode, ciphertext=ciphertext, salt=salt, iv=request.form['iv-textarea'] if iv != 0 else None, plaintext=plaintext)
     else:
         return redirect(url_for('decrypt_error'))
 
