@@ -41,12 +41,13 @@
     <div class="row justify-content-center">
         <div class="col-11 col-md-8">
             <p style="overflow-wrap: break-word">
+                <b>March 2021</b>
                 This fantastic journey started on a rainy night of March 2021.<br>
                 Wandering on Twitter, I stumbled upon a post of <a href="https://twitter.com/cryptolexicon">Crypto Dictionary</a> that
-                talked about the <b>GOST</b> cipher. This symmetric block cipher was the Soviet counterpart of the old American DES.<br>
+                talked about the <b>GOST</b> cipher. This symmetric block cipher was the Soviet counterpart of the old American <b>DES</b>.<br>
                 The GOST cipher is a <b>64 bit block symmetric cipher</b> that is based, like DES, on a Feistel network.
                 The <b>key</b> is <b>256 bit</b> long, unlike DES where the key was dramatically shorter.
-                Both encryption and decryption are performed through 32 rounds. The basic operations used are shift, XOR and S-BOX passing.
+                Both encryption and decryption are performed through 32 rounds. Each round consists of bit rotations, XORs and use of S-Boxes.
                 In this implementation, the S-BOXES are fixed according to the standard <a href="https://tools.ietf.org/html/rfc5830#page-3"><b>GOST R 34.12-2015</b></a>.<br>
                 The most effective attack against GOST requires like 2<sup>70</sup> plaintexts, so the cipher is <u><b>theoretically</b></u> broken.
                 Nevertheless, I think that using it as a toy cannot be harmful for anyone. Just don't use it for your credit card data
@@ -59,38 +60,31 @@
                 Nevertheless, the program could only be launched using the command line, so I wasn't that happy.<br>
                 A couple of days later I learned about the existence of <b>Flask</b> and so I decided that the time had come to
                 give a User Interface to this program. Flask is a very versatile tool and web programming CAN be fun, in the end.<br>
-                This is the final result, obtained by combining Python, HTML, Javascript and some CSS (mostly Bootstrap).<br>
-                Around two years later, in March 2023, I finally decided to make this project take a big turn: leave behind the Python implementation of GOST and make a new one,
-                but in C. C is much faster than Python so I was sure that implementing a crypto algorithm with this language would have yeld a much better result.
-                Things were quite hard in the beginning but I eventually managed to make it work. Now, instead of using the GOST.py module, a C shared library is used to perform
-                encryption and decryption.<br>
-                So, after two years, I can say that the final result is obtained by combining together Python, HTML, Javascript, CSS and, most importantly, C.
+                This is the final result, obtained by combining <b>Python</b>, <b>HTML</b>, <b>Javascript</b> and some <b>CSS</b> (mostly Bootstrap).<br>
+                <br>
+                <b>March 2023</b>
+                Around two years later, in March 2023, I finally decided to take a big leap of faith: leave behind the old, clumsy Python implementation of GOST and work on a brand new one
+                in <b>C</b>, one of the fastest and most famous programming languages. C is much faster than Python so I was sure that a new, proper implementation would have been way faster.
+                Things were quite hard in the beginning as I had to go through the pointers' nightmare, but I eventually managed to make it work. 
+                Now, instead of using the GOST.py module, a C shared library is used to perform encryption and decryption.<br>
+                So, after two years, I can say that the final result is obtained by combining together <b>Python</b>, <b>HTML</b>, <b>Javascript</b>, <b>CSS</b> and, most importantly, <b>C</b>.
             </p>
-            <p>How can I encrypt a message?</p>
+            <p>What do the <b>bold</b> words mean on the homepage?</p>
             <ul style="overflow-wrap: break-word">
-                <li>Make sure that you are in the "Encrypt" tab;</li>
-                <li>Choose an operating mode (CBC is the most widely used).<br>
-                    ECB should never be used, at least for long messages;
+                <li><b>Plaintext</b> is the message that you want to encrypt to unintelligible to those who do not know the password. An example? A super cringe love letter;</li>
+                <li><b>Password</b> is the secret password that will be used to derive a key that will encrypt your message. The strength of encryption heavily relies on this
+                    parameter, so always choose a password that is not that easy to guess;<br>
                 </li>
-                <li>Type the message you want to encrypt in the plaintext box;</li>
-                <li>Type your secret password (don't disclose this secret!);</li>
-                <li>If you want to add salt to the password, you can do it.<br>
-                    Different salts applied to the same password result in completely different
-                    keys, so you can reuse your password and have different keys (and so different
-                    ciphertexts, even if the plaintexts are the same);
+                <li><b>Salt</b> is a random value that helps the key derivation function to derive a unique, fresh key even if the password is the same. 
+                    Salt is used in order to let a user re-use the same password again and again without relying on the same key;
                 </li>
-                <li>Push the "Encrypt" button and wait for the result!</li>
-            </ul>
-            <p>After encrypting a message you'll be redirected to a page containing:</p>
-            <ul style="overflow-wrap: break-word">
-                <li>The operation mode you chose;</li>
-                <li>The plaintext you typed in;</li>
-                <li>The salt you used, which can be none, the one you chose or a random one;</li>
-                <li>The initialization vector (IV) in hexadecimal base.<br>
-                    This information is generated only for operation modes different than ECB;
+                <li><b>Operating mode</b> (or mode of operation) is a specific algorithm that makes a block cipher behave like a stream cipher, enabling a user to encrypt messages
+                    that are longer than a block. Besides ECB, which is the most simple and weak at the same time, all the other ones are good to go;
                 </li>
-                <li>Finally, the encrypted message in hexadecimal base.
+                <li><b>IV</b> (initialization vector) is a block-sized, fresh and unique quantity that is used by modes of operations to guarantee certain properties to the 
+                    ciphertext. IVs should never be used more than once, at least on short periods. Completely random ones are always the best choice;
                 </li>
+                <li><b>Ciphertext</b> is the result of the encryption.</li>
             </ul>
         </div>
     </div>
