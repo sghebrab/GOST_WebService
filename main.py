@@ -3,6 +3,7 @@ import my_utils
 import ctypes
 
 OP_MODES = {"ECB": 0, "CBC": 1, "OFB": 2, "CFB": 3, "CTR": 4}
+ITERATIONS = 100000
 
 app = Flask(__name__)
 
@@ -33,7 +34,7 @@ def encrypt():
         plaintext_as_int_arr.append(int(plaintext_as_bin_str[i:i+64], 2))
 
     # Do the same for the key
-    key, salt = my_utils.pbkdf2(password, salt, iter=100000)
+    key, salt = my_utils.pbkdf2(password, salt, iter=ITERATIONS)
     key_as_int_arr = []
     for i in range(0, 256, 32):
         key_as_int_arr.append(int(key[i:i+32], 2))
@@ -88,7 +89,7 @@ def decrypt():
         ciphertext_as_int_arr.append(int(ciphertext[i:i+16], 16))
 
     # Same logic for the key
-    key, salt = my_utils.pbkdf2(password, salt. iter=100000)
+    key, salt = my_utils.pbkdf2(password, salt, iter=ITERATIONS)
     key_as_int_arr = []
     for i in range(0, 256, 32):
         key_as_int_arr.append(int(key[i:i+32], 2))
