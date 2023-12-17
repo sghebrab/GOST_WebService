@@ -35,17 +35,19 @@
     </div>
     <div class="row justify-content-center lil-jump-bottom" style="overflow-wrap: break-word">
         <div class="col-11 col-md-8">
-            <h3>Data summary</h3>
-            <p>Operation mode: {{op_mode}}</p>
-            <!-- Must leave it like this otherwise the styling rule adds extra whitespaces/newlines -->
-            <div style="white-space: pre-wrap"><p>Plaintext: <br>{{plaintext}}</p></div>
-            <p>Salt: {{salt}}</p>
-            {% if op_mode != "ECB" %}
-            <p>IV (hex): {{iv}}</p>
-            {% endif %}
-            <div id="result" style="margin-top:1.5em">
-                <h3>Encrypted text (hex)</h3>
+            <div id="result">
+                <h4>🔒 Encrypted text (hex) 🔒</h4>
                 <p>{{ciphertext}}</p>
+            </div>
+            <h4 data-toggle="collapse" href="#dataSummaryBody">⬇️ Data summary ⬇️</h4>
+            <div class="collapse" id="dataSummaryBody">
+                <p>Operation mode: {{op_mode}}</p>
+                <!-- Must leave it like this otherwise the styling rule adds extra whitespaces/newlines -->
+                <div style="white-space: pre-wrap"><p>Plaintext: <br>{{plaintext}}</p></div>
+                <p>Salt: {{salt}}</p>
+                {% if op_mode != "ECB" %}
+                <p>IV (hex): {{iv}}</p>
+                {% endif %}
             </div>
         </div>
     </div>
